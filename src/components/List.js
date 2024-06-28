@@ -1,18 +1,8 @@
 import ListItem from "./ListItem";
 
-const List = () => {
-
-    const todos = [
-      {id: 0, title: 'Утренняя зарядка'},
-      {id: 1, title: 'Уборка'},
-      {id: 2, title: 'Завтрак'},
-      {id: 3, title: 'Пробежка'},
-      {id: 4, title: 'Занятия'},
-    ]
-
-
-    const render = todos.map(item => {
-      return <ListItem key={item.id} task={item}/>
+const List = (proprs) => {
+    const render = proprs.data.map(item => {
+      return <ListItem onToggleImportant={proprs.onToggleImportant} onToggleDone={proprs.onToggleDone} deliteTask={proprs.deliteTask} key={item.id} task={item}/>
     })
 
     const emptyList = (
@@ -23,7 +13,7 @@ const List = () => {
 
     return (
         <ul className="todo-list">
-        {todos.length > 0 ? render : emptyList}
+        {proprs.data.length > 0 ? render : emptyList}
       </ul>
     )
 }
