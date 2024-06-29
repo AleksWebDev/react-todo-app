@@ -2,6 +2,7 @@ import React from 'react';
 
 import Header from '../Header.js';
 import Search from '../Search.js';
+import StatusBar from '../statusBar.js';
 import  List from '../List.js';
 import Footer from '../Footer';
 import './App.css';
@@ -19,6 +20,7 @@ class App extends React.Component{
           ], 
 
           term: '',
+          status: 'active', // 'all', 'active', 'done' 
     }
 
     onToggleImportant = (id) => {
@@ -106,15 +108,36 @@ class App extends React.Component{
         })
     }
 
+    filterByStatus = (items, status) => {
+        switch(status){
+            case 'all' : 
+                return items;
+            case 'active' : 
+                return items.filter((item) => {return item.done === false})
+            case 'done' : 
+                return items.filter((item) => {return item.done === true})
+            case 'default' :
+                return items
+        }
+    }
+
+    changeStatus = (status) => {
+        this.setState({status: status});
+    }
+
     render() {
 
         const visibleItems = this.search(this.state.todoData, this.state.term);
+        const filterByStatus = this.filterByStatus(visibleItems, this.state.status);
 
         return (
             <div className='app'>
                 <Header/>
+                <div className="search">
                 <Search changeTerm={this.changeTerm} term={this.state.term} />
-                <List data={visibleItems} onToggleImportant={this.onToggleImportant} onToggleDone={this.onToggleDone} deliteTask={this.deliteTask} />
+                <StatusBar changeStatus={this.changeStatus} status={this.state.status} />
+                </div>
+                <List data={filterByStatus} onToggleImportant={this.onToggleImportant} onToggleDone={this.onToggleDone} deliteTask={this.deliteTask} />
                 <Footer addItem={this.addItem}/>
             </div>
         )
